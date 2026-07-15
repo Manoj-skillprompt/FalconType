@@ -86,12 +86,12 @@ export function ResultScreen() {
   )
 
   return (
-    <div className="w-full max-w-[900px] mx-auto px-4 animate-fadeIn">
+    <section className="w-full max-w-[900px] mx-auto px-4 animate-fadeIn" aria-label="Test results">
       <div className="flex flex-col items-center gap-8">
         {/* Main Stats */}
-        <div className="flex items-center gap-8 justify-center flex-wrap">
+        <div className="flex items-center gap-8 justify-center flex-wrap" role="list">
           {mainStats.map((stat) => (
-            <div key={stat.label} className="flex flex-col items-center">
+            <div key={stat.label} role="listitem" className="flex flex-col items-center">
               <span className="text-[var(--text-secondary)] text-xs uppercase tracking-widest">
                 {stat.label}
               </span>
@@ -194,6 +194,6 @@ export function ResultScreen() {
           </button>
         </div>
       </div>
-    </div>
+    </section>
   )
 }

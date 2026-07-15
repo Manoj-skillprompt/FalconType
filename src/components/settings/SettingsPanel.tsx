@@ -74,13 +74,18 @@ export function SettingsPanel() {
 
   return (
     <>
-      <div className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm" onClick={() => setOpen(false)} />
-      <div className={cn(
-        'fixed right-0 top-0 bottom-0 z-50 w-[380px] max-w-[90vw]',
-        'bg-[var(--bg)] border-l border-[var(--border)] shadow-2xl',
-        'overflow-y-auto p-6',
-        'animate-slideIn'
-      )}>
+      <div className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm" onClick={() => setOpen(false)} aria-hidden="true" />
+      <aside
+        className={cn(
+          'fixed right-0 top-0 bottom-0 z-50 w-[380px] max-w-[90vw]',
+          'bg-[var(--bg)] border-l border-[var(--border)] shadow-2xl',
+          'overflow-y-auto p-6',
+          'animate-slideIn'
+        )}
+        role="dialog"
+        aria-label="Settings"
+        aria-modal="true"
+      >
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-lg font-semibold">Settings</h2>
           <button
@@ -245,7 +250,7 @@ export function SettingsPanel() {
             </OptionGroup>
           </Section>
         </div>
-      </div>
+      </aside>
     </>
   )
 }

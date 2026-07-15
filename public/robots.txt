@@ -1,0 +1,33 @@
+# FalconType - Typing Speed Test
+# https://falcontype.com
+
+User-agent: *
+Allow: /
+Disallow: /settings
+Disallow: /api/
+
+# Sitemaps
+Sitemap: https://falcontype.com/sitemap.xml
+
+# Crawl-delay for polite bots
+Crawl-delay: 1
+
+# Allow Googlebot
+User-agent: Googlebot
+Allow: /
+Disallow: /settings
+
+# Allow Bingbot
+User-agent: Bingbot
+Allow: /
+Disallow: /settings
+
+# Allow social media crawlers for sharing
+User-agent: Twitterbot
+Allow: /
+
+User-agent: FacebookExternalHit
+Allow: /
+
+User-agent: LinkedInBot
+Allow: /

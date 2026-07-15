@@ -73,7 +73,7 @@ export function TestModes() {
 
   return (
     <div className={cn(
-      'flex flex-col items-center justify-center gap-2 transition-opacity duration-200',
+      'flex flex-col items-center justify-center gap-2 transition-opacity mt-20 duration-200',
       isStarted && 'opacity-0 pointer-events-none'
     )}>
       <div className="flex items-center gap-1">

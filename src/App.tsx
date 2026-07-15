@@ -1,41 +1,57 @@
-import { useState, useEffect } from 'react'
+import { useEffect, lazy, Suspense } from 'react'
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
 import { Header } from '@/components/layout/Header'
-import { TypingArea } from '@/components/typing/TypingArea'
-import { LiveStats } from '@/components/typing/LiveStats'
-import { TestModes } from '@/components/typing/TestModes'
-import { ResultScreen } from '@/components/result/ResultScreen'
+import { Footer } from '@/components/layout/Footer'
+import { SkipLink } from '@/components/ui/SkipLink'
+import { Breadcrumbs } from '@/components/layout/Breadcrumbs'
 import { SettingsPanel } from '@/components/settings/SettingsPanel'
-import { Dashboard } from '@/components/dashboard/Dashboard'
-import { Leaderboard } from '@/components/dashboard/Leaderboard'
 import { ShortcutsHelp } from '@/components/ui/ShortcutsHelp'
 import { useTypingStore } from '@/stores/typingStore'
-import { useHistoryStore } from '@/stores/historyStore'
 import { cn } from '@/lib/utils'
 
-type TabOption = 'test' | 'dashboard' | 'leaderboard' | 'settings'
+const TestPage = lazy(() =>
+  import('@/components/typing/TestPage').then((m) => ({ default: m.TestPage }))
+)
+const DashboardPage = lazy(() =>
+  import('@/components/dashboard/DashboardPage').then((m) => ({ default: m.DashboardPage }))
+)
+const LeaderboardPage = lazy(() =>
+  import('@/components/dashboard/LeaderboardPage').then((m) => ({ default: m.LeaderboardPage }))
+)
+const SettingsPage = lazy(() =>
+  import('@/components/settings/SettingsPage').then((m) => ({ default: m.SettingsPage }))
+)
+
+function PageLoader() {
+  return (
+    <div className="flex-1 flex items-center justify-center">
+      <div className="text-[var(--text-secondary)] text-sm animate-pulse">Loading...</div>
+    </div>
+  )
+}
 
 function App() {
-  const [activeTab, setActiveTab] = useState<TabOption>('test')
-  const isStarted = useTypingStore(s => s.isStarted)
-  const isFinished = useTypingStore(s => s.isFinished)
-  const resetTest = useTypingStore(s => s.resetTest)
-  const tick = useTypingStore(s => s.tick)
-  const initTest = useTypingStore(s => s.initTest)
-  const isStartedTab = useTypingStore(s => s.isStarted)
+  const location = useLocation()
+  const navigate = useNavigate()
 
-  const showNewAchievements = useHistoryStore(s => s.showNewAchievements)
-  const newAchievements = useHistoryStore(s => s.newAchievements)
-  const setShowNewAchievements = useHistoryStore(s => s.setShowNewAchievements)
+  const tick = useTypingStore((s) => s.tick)
+  const initTest = useTypingStore((s) => s.initTest)
+  const isStartedTab = useTypingStore((s) => s.isStarted)
+  const isFinished = useTypingStore((s) => s.isFinished)
+  const resetTest = useTypingStore((s) => s.resetTest)
+
+  const isTestRoute = location.pathname === '/'
 
   useEffect(() => {
     initTest()
   }, [initTest])
 
   useEffect(() => {
-    if (!isStarted || isFinished) return
+    if (!isTestRoute) return
+    if (!isStartedTab || isFinished) return
     const interval = setInterval(tick, 200)
     return () => clearInterval(interval)
-  }, [isStarted, isFinished, tick])
+  }, [isTestRoute, isStartedTab, isFinished, tick])
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -48,59 +64,55 @@ function App() {
       }
       if (e.key === 'Escape') {
         if (isFinished) resetTest()
-        setActiveTab('test')
+        navigate('/')
       }
     }
     window.addEventListener('keydown', handler)
     return () => window.removeEventListener('keydown', handler)
-  }, [isFinished, resetTest, isStartedTab])
+  }, [isFinished, resetTest, isStartedTab, navigate])
 
   return (
-    <div className={cn(
-      'min-h-screen flex flex-col',
-      'bg-[var(--bg)] text-[var(--text-primary)]'
-    )}>
-      <Header activeTab={activeTab} onTabChange={setActiveTab} />
+    <div
+      className={cn(
+        'min-h-screen flex flex-col',
+        'bg-[var(--bg)] text-[var(--text-primary)]'
+      )}
+    >
+      <SkipLink />
+      <Header />
 
-      <main className="flex-1 flex flex-col items-center mt-46 py-4">
-        {activeTab === 'test' && (
-          <div className="w-full flex flex-col items-center justify-center gap-2">
-            <TestModes />
-            {!isFinished && <TypingArea />}
-            {!isFinished && <LiveStats />}
-            {isFinished && <ResultScreen />}
-          </div>
-        )}
+      <Breadcrumbs />
 
-        {activeTab === 'dashboard' && <Dashboard />}
-        {activeTab === 'leaderboard' && <Leaderboard />}
+      <main id="main-content" className="flex-1 flex flex-col items-center py-4">
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            <Route path="/" element={<TestPage />} />
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/leaderboard" element={<LeaderboardPage />} />
+            <Route path="/settings" element={<SettingsPage />} />
+            <Route
+              path="*"
+              element={
+                <section className="flex flex-col items-center gap-4 py-20">
+                  <h1 className="text-4xl font-bold text-[var(--accent)]">404</h1>
+                  <p className="text-[var(--text-secondary)]">Page not found</p>
+                  <button
+                    onClick={() => navigate('/')}
+                    className="px-4 py-2 rounded-lg bg-[var(--accent)] text-[var(--bg)] text-sm font-medium hover:opacity-90 transition-opacity"
+                  >
+                    Go to Typing Test
+                  </button>
+                </section>
+              }
+            />
+          </Routes>
+        </Suspense>
       </main>
+
+      <Footer />
 
       <SettingsPanel />
       <ShortcutsHelp />
-
-      {showNewAchievements && newAchievements.length > 0 && (
-        <div className={cn(
-          'fixed bottom-6 left-1/2 -translate-x-1/2 z-50',
-          'px-4 py-3 rounded-xl',
-          'bg-[var(--bg-card)] border border-[var(--border)] shadow-xl',
-          'animate-slideUp'
-        )}>
-          <div className="flex items-center gap-3">
-            <span className="text-2xl">{newAchievements[0].icon}</span>
-            <div>
-              <p className="text-sm font-medium">Achievement Unlocked!</p>
-              <p className="text-xs text-[var(--text-secondary)]">{newAchievements[0].name}: {newAchievements[0].description}</p>
-            </div>
-            <button
-              onClick={() => setShowNewAchievements(false)}
-              className="ml-2 text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-            >
-              Dismiss
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

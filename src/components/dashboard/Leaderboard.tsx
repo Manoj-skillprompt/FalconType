@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
 import { useHistoryStore } from '@/stores/historyStore'
+import { Link } from 'react-router-dom'
 import { Trophy, Medal, Users, Clock, Globe } from 'lucide-react'
 
 type LeaderboardFilter = 'global' | 'friends' | 'weekly' | 'monthly' | 'alltime'
@@ -13,7 +14,6 @@ const FILTERS: { key: LeaderboardFilter; label: string; icon: typeof Trophy }[] 
   { key: 'alltime', label: 'All Time', icon: Trophy },
 ]
 
-// Placeholder data for the leaderboard
 const MOCK_ENTRIES = [
   { rank: 1, name: 'TypeMaster', wpm: 152, accuracy: 98, tests: 1240 },
   { rank: 2, name: 'SpeedDev', wpm: 148, accuracy: 97, tests: 892 },
@@ -37,7 +37,6 @@ function getRankBadge(rank: number) {
 export function Leaderboard() {
   const [activeFilter, setActiveFilter] = useState<LeaderboardFilter>('global')
   const results = useHistoryStore(s => s.results)
-  const personalBests = useHistoryStore(s => s.personalBests)
 
   const bestResult = results.length > 0
     ? results.reduce((best, r) => r.wpm > best.wpm ? r : best, results[0])
@@ -46,12 +45,14 @@ export function Leaderboard() {
   return (
     <div className="w-full max-w-[900px] mx-auto px-4 py-6 space-y-6 animate-fadeIn">
       {/* Filters */}
-      <div className="flex items-center justify-center gap-1">
+      <div className="flex items-center justify-center gap-1" role="tablist" aria-label="Leaderboard filter">
         {FILTERS.map((f) => {
           const Icon = f.icon
           return (
             <button
               key={f.key}
+              role="tab"
+              aria-selected={activeFilter === f.key}
               onClick={() => setActiveFilter(f.key)}
               className={cn(
                 'flex items-center gap-1.5 px-3 py-1.5 text-sm rounded-lg transition-all',
@@ -60,7 +61,7 @@ export function Leaderboard() {
                   : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)]'
               )}
             >
-              <Icon size={16} />
+              <Icon size={16} aria-hidden="true" />
               {f.label}
             </button>
           )
@@ -83,18 +84,19 @@ export function Leaderboard() {
       )}
 
       {/* Leaderboard Table */}
-      <div className={cn('rounded-xl border border-[var(--border)] overflow-hidden')}>
-        <div className="divide-y divide-[var(--border)]">
+      <section className={cn('rounded-xl border border-[var(--border)] overflow-hidden')} aria-label="Leaderboard rankings">
+        <div className="divide-y divide-[var(--border)]" role="list">
           {MOCK_ENTRIES.map((entry) => (
             <div
               key={entry.rank}
+              role="listitem"
               className={cn(
                 'flex items-center justify-between px-4 py-3',
                 'hover:bg-[var(--bg-card)] transition-colors'
               )}
             >
               <div className="flex items-center gap-4">
-                <span className="w-8 text-center text-lg">{getRankBadge(entry.rank)}</span>
+                <span className="w-8 text-center text-lg" aria-label={`Rank ${entry.rank}`}>{getRankBadge(entry.rank)}</span>
                 <div>
                   <p className="font-medium text-sm">{entry.name}</p>
                   <p className="text-xs text-[var(--text-secondary)]">{entry.tests.toLocaleString()} tests</p>
@@ -113,6 +115,13 @@ export function Leaderboard() {
             </div>
           ))}
         </div>
+      </section>
+
+      {/* Internal linking */}
+      <div className="text-center text-sm text-[var(--text-secondary)]">
+        <Link to="/" className="hover:text-[var(--accent)] transition-colors underline underline-offset-2">
+          Take a typing test &rarr;
+        </Link>
       </div>
     </div>
   )

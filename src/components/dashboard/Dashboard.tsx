@@ -1,7 +1,8 @@
 import { useHistoryStore } from '@/stores/historyStore'
 import { cn } from '@/lib/utils'
 import { formatTime } from '@/lib/utils'
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, AreaChart, Area } from 'recharts'
+import { Link } from 'react-router-dom'
+import { BarChart, AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts'
 import { Trophy, Zap, Target, Flame, Clock, TrendingUp } from 'lucide-react'
 
 function StatCard({ icon: Icon, label, value, subvalue }: { icon: typeof Trophy; label: string; value: string | number; subvalue?: string }) {
@@ -11,7 +12,7 @@ function StatCard({ icon: Icon, label, value, subvalue }: { icon: typeof Trophy;
       'bg-[var(--bg-card)] border border-[var(--border)]'
     )}>
       <div className="p-2 rounded-lg bg-[var(--accent)]/10">
-        <Icon size={20} className="text-[var(--accent)]" />
+        <Icon size={20} className="text-[var(--accent)]" aria-hidden="true" />
       </div>
       <div>
         <p className="text-xs text-[var(--text-secondary)] uppercase tracking-wider">{label}</p>
@@ -60,22 +61,24 @@ export function Dashboard() {
   return (
     <div className="w-full max-w-[900px] mx-auto px-4 py-6 space-y-8 animate-fadeIn">
       {/* Stats Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <StatCard icon={Zap} label="Average WPM" value={avgWpm} />
-        <StatCard icon={Trophy} label="Best WPM" value={bestWpm} />
-        <StatCard icon={Target} label="Average Accuracy" value={`${avgAcc}%`} />
-        <StatCard icon={Clock} label="Total Time" value={formatTime(Math.floor(totalTime))} />
-        <StatCard icon={Flame} label="Current Streak" value={`${streak.current} days`} subvalue={`Best: ${streak.longest} days`} />
-        <StatCard icon={TrendingUp} label="Tests Completed" value={totalTests} />
-        <StatCard icon={Trophy} label="Personal Bests" value={Object.keys(personalBests).length} />
-        <StatCard icon={Target} label="Achievements" value={`${unlockedAchievements.length}/${achievements.length}`} />
-      </div>
+      <section aria-label="Typing statistics overview">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <StatCard icon={Zap} label="Average WPM" value={avgWpm} />
+          <StatCard icon={Trophy} label="Best WPM" value={bestWpm} />
+          <StatCard icon={Target} label="Average Accuracy" value={`${avgAcc}%`} />
+          <StatCard icon={Clock} label="Total Time" value={formatTime(Math.floor(totalTime))} />
+          <StatCard icon={Flame} label="Current Streak" value={`${streak.current} days`} subvalue={`Best: ${streak.longest} days`} />
+          <StatCard icon={TrendingUp} label="Tests Completed" value={totalTests} />
+          <StatCard icon={Trophy} label="Personal Bests" value={Object.keys(personalBests).length} />
+          <StatCard icon={Target} label="Achievements" value={`${unlockedAchievements.length}/${achievements.length}`} />
+        </div>
+      </section>
 
       {/* WPM Progress */}
       {progressData.length > 1 && (
-        <div className={cn('p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border)]')}>
-          <h3 className="text-sm font-medium text-[var(--text-secondary)] uppercase tracking-wider mb-4">WPM Progress</h3>
-          <div className="h-[200px]">
+        <section className={cn('p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border)]')}>
+          <h2 className="text-sm font-medium text-[var(--text-secondary)] uppercase tracking-wider mb-4">WPM Progress</h2>
+          <div className="h-[200px]" role="img" aria-label="WPM progress chart showing your typing speed over recent tests">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={progressData}>
                 <defs>
@@ -99,13 +102,13 @@ export function Dashboard() {
               </AreaChart>
             </ResponsiveContainer>
           </div>
-        </div>
+        </section>
       )}
 
       {/* Activity Heatmap */}
-      <div className={cn('p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border)]')}>
-        <h3 className="text-sm font-medium text-[var(--text-secondary)] uppercase tracking-wider mb-4">Activity (28 days)</h3>
-        <div className="flex gap-1">
+      <section className={cn('p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border)]')}>
+        <h2 className="text-sm font-medium text-[var(--text-secondary)] uppercase tracking-wider mb-4">Activity (28 days)</h2>
+        <div className="flex gap-1" role="img" aria-label="Activity heatmap showing typing sessions over the last 28 days">
           {heatmapDays.map((day) => (
             <div
               key={day.date}
@@ -118,21 +121,23 @@ export function Dashboard() {
                 day.count >= 5 && 'bg-[var(--accent)]'
               )}
               title={`${day.date}: ${day.count} tests${day.wpm > 0 ? `, ${day.wpm} WPM` : ''}`}
+              aria-hidden="true"
             />
           ))}
         </div>
-      </div>
+      </section>
 
       {/* Achievements */}
       {unlockedAchievements.length > 0 && (
-        <div className={cn('p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border)]')}>
-          <h3 className="text-sm font-medium text-[var(--text-secondary)] uppercase tracking-wider mb-4">
+        <section className={cn('p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border)]')}>
+          <h2 className="text-sm font-medium text-[var(--text-secondary)] uppercase tracking-wider mb-4">
             Achievements ({unlockedAchievements.length}/{achievements.length})
-          </h3>
-          <div className="flex flex-wrap gap-2">
+          </h2>
+          <div className="flex flex-wrap gap-2" role="list">
             {achievements.map((a) => (
               <div
                 key={a.id}
+                role="listitem"
                 className={cn(
                   'flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs transition-all',
                   a.unlockedAt
@@ -141,34 +146,41 @@ export function Dashboard() {
                 )}
                 title={a.description}
               >
-                <span>{a.icon}</span>
+                <span aria-hidden="true">{a.icon}</span>
                 <span>{a.name}</span>
               </div>
             ))}
           </div>
-        </div>
+        </section>
       )}
 
       {/* Recent Results */}
       {results.length > 0 && (
-        <div className={cn('p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border)]')}>
-          <h3 className="text-sm font-medium text-[var(--text-secondary)] uppercase tracking-wider mb-4">Recent Tests</h3>
-          <div className="space-y-1">
+        <section className={cn('p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border)]')}>
+          <h2 className="text-sm font-medium text-[var(--text-secondary)] uppercase tracking-wider mb-4">Recent Tests</h2>
+          <div className="space-y-1" role="list">
             {results.slice(0, 10).map((r) => (
-              <div key={r.id} className="flex items-center justify-between py-1.5 text-sm">
+              <div key={r.id} role="listitem" className="flex items-center justify-between py-1.5 text-sm">
                 <div className="flex items-center gap-3">
                   <span className="font-mono font-bold text-[var(--accent)] w-12">{r.wpm}wpm</span>
                   <span className="text-[var(--text-secondary)]">{r.accuracy}%</span>
                   <span className="text-[var(--text-secondary)] text-xs">{r.mode}</span>
                 </div>
-                <span className="text-xs text-[var(--text-secondary)]">
+                <time className="text-xs text-[var(--text-secondary)]" dateTime={new Date(r.timestamp).toISOString()}>
                   {new Date(r.timestamp).toLocaleDateString()}
-                </span>
+                </time>
               </div>
             ))}
           </div>
-        </div>
+        </section>
       )}
+
+      {/* Internal linking */}
+      <section className="text-center text-sm text-[var(--text-secondary)]">
+        <Link to="/leaderboard" className="hover:text-[var(--accent)] transition-colors underline underline-offset-2">
+          View the global leaderboard &rarr;
+        </Link>
+      </section>
     </div>
   )
 }

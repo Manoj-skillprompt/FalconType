@@ -32,12 +32,14 @@ export function LiveStats() {
   )
 
   return (
-    <div
+    <aside
       className={cn(
         'flex items-center justify-center gap-5 px-4 py-2 text-sm',
         'transition-opacity duration-300',
         (isStarted || isFinished) ? 'opacity-100' : 'opacity-30'
       )}
+      aria-label="Live typing statistics"
+      aria-live="polite"
     >
       {statItems.map((item) => (
         <div key={item.label} className="flex items-center gap-1.5">
@@ -49,6 +51,6 @@ export function LiveStats() {
           </span>
         </div>
       ))}
-    </div>
+    </aside>
   )
 }

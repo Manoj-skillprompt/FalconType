@@ -27,12 +27,17 @@ export function ShortcutsHelp() {
 
   return (
     <>
-      <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm" onClick={() => setIsOpen(false)} />
-      <div className={cn(
-        'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50',
-        'w-[400px] max-w-[90vw] p-6 rounded-xl',
-        'bg-[var(--bg)] border border-[var(--border)] shadow-2xl'
-      )}>
+      <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm" onClick={() => setIsOpen(false)} aria-hidden="true" />
+      <div
+        className={cn(
+          'fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50',
+          'w-[400px] max-w-[90vw] p-6 rounded-xl',
+          'bg-[var(--bg)] border border-[var(--border)] shadow-2xl'
+        )}
+        role="dialog"
+        aria-label="Keyboard shortcuts"
+        aria-modal="true"
+      >
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-lg font-semibold">Keyboard Shortcuts</h2>
           <button onClick={() => setIsOpen(false)} className="p-1 rounded-md hover:bg-[var(--bg-card)]">

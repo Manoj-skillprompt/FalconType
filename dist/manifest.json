@@ -1,0 +1,21 @@
+{
+  "name": "FalconType",
+  "short_name": "FalconType",
+  "description": "Free online typing speed test with real-time WPM tracking and performance analytics.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1e1e2e",
+  "theme_color": "#e2b714",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "productivity"],
+  "lang": "en",
+  "dir": "ltr"
+}
