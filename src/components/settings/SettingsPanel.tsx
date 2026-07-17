@@ -1,36 +1,18 @@
+import { useState, useRef, useEffect } from 'react'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { cn } from '@/lib/utils'
-import type { CaretStyle, CaretAnimation, Theme, FontFamily } from '@/types'
+import type { Theme, FontFamily } from '@/types'
 import { X } from 'lucide-react'
 
 const THEMES: { key: Theme; label: string }[] = [
   { key: 'dark', label: 'Dark' },
   { key: 'light', label: 'Light' },
-  { key: 'olivia', label: 'Olivia' },
-  { key: 'mirage', label: 'Mirage' },
-  { key: 'dracula', label: 'Dracula' },
-  { key: 'monokai', label: 'Monokai' },
 ]
 
 const FONTS: { key: FontFamily; label: string }[] = [
-  { key: 'mono', label: 'Mono' },
-  { key: 'sans', label: 'Sans' },
-  { key: 'serif', label: 'Serif' },
-  { key: 'jetbrains', label: 'JetBrains' },
+  { key: 'mono', label: 'JetBrains Mono' },
   { key: 'fira', label: 'Fira Code' },
-  { key: 'source', label: 'Source Code' },
-]
-
-const CARET_STYLES: { key: CaretStyle; label: string }[] = [
-  { key: 'line', label: 'Line' },
-  { key: 'block', label: 'Block' },
-  { key: 'underline', label: 'Underline' },
-]
-
-const CARET_ANIMATIONS: { key: CaretAnimation; label: string }[] = [
-  { key: 'smooth', label: 'Smooth' },
-  { key: 'solid', label: 'Solid' },
-  { key: 'pulse', label: 'Pulse' },
+  { key: 'grotesk', label: 'Space Grotesk' },
 ]
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -67,8 +49,73 @@ function ToggleButton({ active, onClick, children }: { active: boolean; onClick:
   )
 }
 
+const PRESET_COLORS = [
+  '#e2b714', '#f38ba8', '#a6e3a1', '#89b4fa', '#cba6f7',
+  '#fab387', '#94e2d5', '#f9e2af', '#74c7ec', '#eba0ac',
+]
+
+function AccentColorPicker({ value, onChange }: { value: string; onChange: (c: string) => void }) {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [open])
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen(prev => !prev)}
+        className="w-8 h-8 rounded cursor-pointer border border-[var(--border)]"
+        style={{ backgroundColor: value }}
+      />
+      {open && (
+        <div className={cn(
+          'absolute right-full top-1/2 -translate-y-1/2 mr-3 z-50',
+          'p-3 rounded-lg border border-[var(--border)]',
+          'bg-[var(--bg)] shadow-xl'
+        )}>
+          <div className="grid grid-cols-5 gap-2 mb-2">
+            {PRESET_COLORS.map(c => (
+              <button
+                key={c}
+                onClick={() => { onChange(c); setOpen(false) }}
+                className={cn(
+                  'w-7 h-7 rounded-md border transition-transform hover:scale-110',
+                  value === c ? 'border-[var(--text-primary)] ring-1 ring-[var(--text-primary)]' : 'border-[var(--border)]'
+                )}
+                style={{ backgroundColor: c }}
+              />
+            ))}
+          </div>
+          <div className="flex items-center gap-2 pt-1 border-t border-[var(--border)]">
+            <input
+              type="color"
+              value={value}
+              onChange={e => onChange(e.target.value)}
+              className="w-7 h-7 rounded cursor-pointer border border-[var(--border)]"
+            />
+            <span className="text-[10px] font-mono text-[var(--text-secondary)]">{value}</span>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 export function SettingsPanel() {
-  const { settings, isOpen, setOpen, updateTyping, updateAppearance, updateSound } = useSettingsStore()
+  const settings = useSettingsStore(s => s.settings)
+  const isOpen = useSettingsStore(s => s.isOpen)
+  const setOpen = useSettingsStore(s => s.setOpen)
+  const updateTyping = useSettingsStore(s => s.updateTyping)
+  const updateAppearance = useSettingsStore(s => s.updateAppearance)
+  const updateSound = useSettingsStore(s => s.updateSound)
+  const resetSettings = useSettingsStore(s => s.resetSettings)
 
   if (!isOpen) return null
 
@@ -130,32 +177,12 @@ export function SettingsPanel() {
             </OptionGroup>
 
             <OptionGroup label="Accent Color">
-              <div className="flex items-center gap-2">
-                <input
-                  type="color"
-                  value={settings.appearance.accentColor}
-                  onChange={e => updateAppearance({ accentColor: e.target.value })}
-                  className="w-8 h-8 rounded cursor-pointer border border-[var(--border)]"
-                />
-                <span className="text-xs font-mono text-[var(--text-secondary)]">{settings.appearance.accentColor}</span>
-              </div>
+              <AccentColorPicker
+                value={settings.appearance.accentColor}
+                onChange={(color) => updateAppearance({ accentColor: color })}
+              />
             </OptionGroup>
 
-            <OptionGroup label="Caret Style">
-              {CARET_STYLES.map(cs => (
-                <ToggleButton key={cs.key} active={settings.appearance.caretStyle === cs.key} onClick={() => updateAppearance({ caretStyle: cs.key })}>
-                  {cs.label}
-                </ToggleButton>
-              ))}
-            </OptionGroup>
-
-            <OptionGroup label="Caret Animation">
-              {CARET_ANIMATIONS.map(ca => (
-                <ToggleButton key={ca.key} active={settings.appearance.caretAnimation === ca.key} onClick={() => updateAppearance({ caretAnimation: ca.key })}>
-                  {ca.label}
-                </ToggleButton>
-              ))}
-            </OptionGroup>
           </Section>
 
           <Section title="Typing">
@@ -249,6 +276,17 @@ export function SettingsPanel() {
               </div>
             </OptionGroup>
           </Section>
+
+          <button
+            onClick={resetSettings}
+            className={cn(
+              'w-full px-4 py-2 text-xs rounded-lg transition-colors',
+              'border border-[var(--border)] text-[var(--text-secondary)]',
+              'hover:bg-[var(--text-incorrect)]/10 hover:text-[var(--text-incorrect)] hover:border-[var(--text-incorrect)]/30'
+            )}
+          >
+            Reset to Defaults
+          </button>
         </div>
       </aside>
     </>

@@ -27,8 +27,6 @@ const DEFAULT_APPEARANCE: AppearanceSettings = {
   accentColor: '#e2b714',
   fontFamily: 'mono',
   fontSize: 24,
-  caretStyle: 'line',
-  caretAnimation: 'smooth',
 }
 
 const DEFAULT_SOUND: SoundSettings = {

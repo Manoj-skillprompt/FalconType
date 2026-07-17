@@ -17,28 +17,19 @@ export function TypingArea() {
   const focus = useTypingStore(s => s.focus)
   const handleKeyPress = useTypingStore(s => s.handleKeyPress)
   const handleBackspace = useTypingStore(s => s.handleBackspace)
-  const initTest = useTypingStore(s => s.initTest)
   const setFocus = useTypingStore(s => s.setFocus)
   const timer = useTypingStore(s => s.timer)
   const isStarted = useTypingStore(s => s.isStarted)
 
   const settings = useSettingsStore(s => s.settings)
   const { blindMode, hideTypedWords, mode } = settings.typing
-  const { caretStyle, caretAnimation } = settings.appearance
 
   const caretClasses = cn(
     'inline-block w-[2px] h-[1.2em] -ml-[1px]',
-    caretAnimation === 'smooth' && 'transition-all duration-[80ms] ease-out',
-    caretAnimation === 'pulse' && 'animate-pulse',
-    caretAnimation !== 'pulse' && isIdle && 'caret-blink',
-    caretStyle === 'block' && 'w-[0.6em] h-[1.2em]',
-    caretStyle === 'underline' && 'h-[3px] translate-y-[0.6em]',
+    'transition-all duration-[80ms] ease-out',
+    isIdle && 'caret-blink',
     'bg-[var(--accent)]'
   )
-
-  useEffect(() => {
-    initTest()
-  }, [initTest])
 
   useLayoutEffect(() => {
     const container = containerRef.current
@@ -191,22 +182,19 @@ export function TypingArea() {
                         isIncorrect && 'text-[var(--text-incorrect)]',
                         isIncorrect && 'underline decoration-[var(--text-incorrect)] decoration-2 underline-offset-2',
                         isUntyped && 'text-[var(--text-untyped)]',
-                        isActive && caretStyle === 'block' && cn(
-                          isCorrect !== false ? 'bg-[var(--accent)] text-[var(--bg)]' : 'bg-[var(--text-incorrect)] text-[var(--bg)]'
-                        ),
                         char.char === ' ' && 'w-[0.3em]',
                         char.char === ' ' && isActive && 'inline-block'
                       )}
                     >
                       {char.char === ' ' ? '\u00A0' : char.char}
-                      {isActive && caretStyle !== 'block' && (
+                      {isActive && (
                         <span className={cn(caretClasses, 'absolute top-1/2 -translate-y-1/2 left-0')} />
                       )}
                     </span>
                   )
                 })}
                 {/* Caret for the space between words (space chars are not rendered as DOM nodes) */}
-                {isSpaceActive && caretStyle !== 'block' && (
+                {isSpaceActive && (
                   <span
                     data-active="true"
                     data-index={wordEnd}

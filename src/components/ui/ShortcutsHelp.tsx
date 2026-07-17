@@ -3,10 +3,12 @@ import { cn } from '@/lib/utils'
 import { X } from 'lucide-react'
 
 const SHORTCUTS = [
-  { keys: ['Tab', 'Enter'], description: 'Restart test' },
-  { keys: ['Esc'], description: 'Open command menu' },
+  { keys: ['Ctrl', 'Enter'], description: 'Next test' },
+  { keys: ['Shift', 'Enter'], description: 'Retry test' },
+  { keys: ['Esc'], description: 'Stop test / Go home' },
+  { keys: ['Ctrl', ','], description: 'Toggle settings' },
   { keys: ['Ctrl', '/'], description: 'Toggle shortcuts help' },
-  { keys: ['Ctrl', 'K'], description: 'Open command palette' },
+  { keys: ['Vol+', 'Vol-', 'Vol Mute'], description: 'Volume controls' },
 ]
 
 export function ShortcutsHelp() {

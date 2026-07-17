@@ -14,6 +14,7 @@ export function ResultScreen() {
   const chars = useTypingStore(s => s.chars)
   const isFinished = useTypingStore(s => s.isFinished)
   const resetTest = useTypingStore(s => s.resetTest)
+  const retryTest = useTypingStore(s => s.retryTest)
   const addResult = useHistoryStore(s => s.addResult)
   const personalBests = useHistoryStore(s => s.personalBests)
   const settings = useSettingsStore(s => s.settings)
@@ -170,28 +171,58 @@ export function ResultScreen() {
 
         {/* Actions */}
         <div className="flex items-center gap-4 mt-2">
-          <button
-            onClick={resetTest}
-            className={cn(
-              'px-6 py-2 rounded-lg font-medium text-sm',
-              'bg-[var(--accent)] text-[var(--bg)]',
-              'hover:opacity-90 transition-opacity',
-              'focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:ring-offset-2 focus:ring-offset-[var(--bg)]'
-            )}
-          >
-            Next Test
-          </button>
-          <button
-            onClick={resetTest}
-            className={cn(
-              'px-6 py-2 rounded-lg font-medium text-sm',
-              'border border-[var(--border)] text-[var(--text-secondary)]',
-              'hover:bg-[var(--bg-card)] transition-colors',
-              'focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:ring-offset-2 focus:ring-offset-[var(--bg)]'
-            )}
-          >
-            Retry (Tab + Enter)
-          </button>
+          <div className="flex flex-col items-center gap-1.5">
+            <button
+              onClick={resetTest}
+              className={cn(
+                'px-6 py-2 rounded-lg font-medium text-sm',
+                'bg-[var(--accent)] text-[var(--bg)]',
+                'hover:opacity-90 transition-opacity',
+                'focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:ring-offset-2 focus:ring-offset-[var(--bg)]'
+              )}
+            >
+              Next Test
+            </button>
+            <div className="flex items-center gap-1">
+              <kbd className={cn(
+                'px-1.5 py-0.5 text-[10px] font-mono rounded',
+                'bg-[var(--bg-card)] border border-[var(--border)]',
+                'text-[var(--text-secondary)]'
+              )}>Ctrl</kbd>
+              <span className="text-[10px] text-[var(--text-secondary)]">+</span>
+              <kbd className={cn(
+                'px-1.5 py-0.5 text-[10px] font-mono rounded',
+                'bg-[var(--bg-card)] border border-[var(--border)]',
+                'text-[var(--text-secondary)]'
+              )}>Enter</kbd>
+            </div>
+          </div>
+          <div className="flex flex-col items-center gap-1.5">
+            <button
+              onClick={retryTest}
+              className={cn(
+                'px-6 py-2 rounded-lg font-medium text-sm',
+                'border border-[var(--border)] text-[var(--text-secondary)]',
+                'hover:bg-[var(--bg-card)] transition-colors',
+                'focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:ring-offset-2 focus:ring-offset-[var(--bg)]'
+              )}
+            >
+              Retry
+            </button>
+            <div className="flex items-center gap-1">
+              <kbd className={cn(
+                'px-1.5 py-0.5 text-[10px] font-mono rounded',
+                'bg-[var(--bg-card)] border border-[var(--border)]',
+                'text-[var(--text-secondary)]'
+              )}>Shift</kbd>
+              <span className="text-[10px] text-[var(--text-secondary)]">+</span>
+              <kbd className={cn(
+                'px-1.5 py-0.5 text-[10px] font-mono rounded',
+                'bg-[var(--bg-card)] border border-[var(--border)]',
+                'text-[var(--text-secondary)]'
+              )}>Enter</kbd>
+            </div>
+          </div>
         </div>
       </div>
     </section>

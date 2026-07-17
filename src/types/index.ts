@@ -4,10 +4,8 @@ export type WordOption = 25 | 50 | 100 |120| 'custom'
 export type Difficulty = 'easy' | 'medium' | 'hard'
 export type Language = 'english' | 'spanish' | 'french' | 'german'
 
-export type CaretStyle = 'block' | 'underline' | 'line'
-export type CaretAnimation = 'smooth' | 'solid' | 'pulse'
-export type Theme = 'dark' | 'light' | 'olivia' | 'mirage' | 'dracula' | 'monokai'
-export type FontFamily = 'mono' | 'sans' | 'serif' | 'jetbrains' | 'fira' | 'source'
+export type Theme = 'dark' | 'light'
+export type FontFamily = 'mono' | 'fira' | 'grotesk'
 
 export interface TypingSettings {
   mode: TestMode
@@ -34,8 +32,6 @@ export interface AppearanceSettings {
   accentColor: string
   fontFamily: FontFamily
   fontSize: number
-  caretStyle: CaretStyle
-  caretAnimation: CaretAnimation
 }
 
 export interface SoundSettings {
