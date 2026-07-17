@@ -1,7 +1,6 @@
 import { useHistoryStore } from '@/stores/historyStore'
 import { cn } from '@/lib/utils'
 import { formatTime } from '@/lib/utils'
-import { Link } from 'react-router-dom'
 import { BarChart, AreaChart, Area, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts'
 import { Trophy, Zap, Target, Flame, Clock, TrendingUp } from 'lucide-react'
 
@@ -67,12 +66,33 @@ export function Dashboard() {
           <StatCard icon={Trophy} label="Best WPM" value={bestWpm} />
           <StatCard icon={Target} label="Average Accuracy" value={`${avgAcc}%`} />
           <StatCard icon={Clock} label="Total Time" value={formatTime(Math.floor(totalTime))} />
-          <StatCard icon={Flame} label="Current Streak" value={`${streak.current} days`} subvalue={`Best: ${streak.longest} days`} />
+          <StatCard icon={Flame} label="Streak" value={`${streak.current} days`} subvalue={`Best: ${streak.longest} days`} />
           <StatCard icon={TrendingUp} label="Tests Completed" value={totalTests} />
           <StatCard icon={Trophy} label="Personal Bests" value={Object.keys(personalBests).length} />
           <StatCard icon={Target} label="Achievements" value={`${unlockedAchievements.length}/${achievements.length}`} />
         </div>
       </section>
+
+      {/* Recent Results */}
+      {results.length > 0 && (
+        <section className={cn('p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border)]')}>
+          <h2 className="text-sm font-medium text-[var(--text-secondary)] uppercase tracking-wider mb-4">Recent Tests</h2>
+          <div className="space-y-1" role="list">
+            {results.slice(0, 10).map((r) => (
+              <div key={r.id} role="listitem" className="flex items-center justify-between py-1.5 text-sm">
+                <div className="flex items-center gap-3">
+                  <span className="font-mono font-bold text-[var(--accent)] w-12">{r.wpm}wpm</span>
+                  <span className="text-[var(--text-secondary)]">{r.accuracy}%</span>
+                  <span className="text-[var(--text-secondary)] text-xs">{r.mode}</span>
+                </div>
+                <time className="text-xs text-[var(--text-secondary)]" dateTime={new Date(r.timestamp).toISOString()}>
+                  {new Date(r.timestamp).toLocaleDateString()}
+                </time>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* WPM Progress */}
       {progressData.length > 1 && (
@@ -153,34 +173,6 @@ export function Dashboard() {
           </div>
         </section>
       )}
-
-      {/* Recent Results */}
-      {results.length > 0 && (
-        <section className={cn('p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border)]')}>
-          <h2 className="text-sm font-medium text-[var(--text-secondary)] uppercase tracking-wider mb-4">Recent Tests</h2>
-          <div className="space-y-1" role="list">
-            {results.slice(0, 10).map((r) => (
-              <div key={r.id} role="listitem" className="flex items-center justify-between py-1.5 text-sm">
-                <div className="flex items-center gap-3">
-                  <span className="font-mono font-bold text-[var(--accent)] w-12">{r.wpm}wpm</span>
-                  <span className="text-[var(--text-secondary)]">{r.accuracy}%</span>
-                  <span className="text-[var(--text-secondary)] text-xs">{r.mode}</span>
-                </div>
-                <time className="text-xs text-[var(--text-secondary)]" dateTime={new Date(r.timestamp).toISOString()}>
-                  {new Date(r.timestamp).toLocaleDateString()}
-                </time>
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Internal linking */}
-      <section className="text-center text-sm text-[var(--text-secondary)]">
-        <Link to="/leaderboard" className="hover:text-[var(--accent)] transition-colors underline underline-offset-2">
-          View the global leaderboard &rarr;
-        </Link>
-      </section>
     </div>
   )
 }

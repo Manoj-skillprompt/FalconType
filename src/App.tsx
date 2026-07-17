@@ -1,4 +1,4 @@
-import { useEffect, lazy, Suspense } from 'react'
+import { useEffect, useRef, lazy, Suspense } from 'react'
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom'
 import { Header } from '@/components/layout/Header'
 import { Footer } from '@/components/layout/Footer'
@@ -22,9 +22,6 @@ const TestPage = lazy(() =>
 )
 const DashboardPage = lazy(() =>
   import('@/components/dashboard/DashboardPage').then((m) => ({ default: m.DashboardPage }))
-)
-const LeaderboardPage = lazy(() =>
-  import('@/components/dashboard/LeaderboardPage').then((m) => ({ default: m.LeaderboardPage }))
 )
 const SettingsPage = lazy(() =>
   import('@/components/settings/SettingsPage').then((m) => ({ default: m.SettingsPage }))
@@ -115,10 +112,24 @@ function App() {
     return () => window.removeEventListener('keydown', handleKeyDown)
   }, [navigate])
 
+  const prevTypingRef = useRef(useSettingsStore.getState().settings.typing)
+  useEffect(() => {
+    const unsub = useSettingsStore.subscribe((state) => {
+      const prev = prevTypingRef.current
+      const next = state.settings.typing
+      prevTypingRef.current = next
+      if (prev === next) return
+      const typingState = useTypingStore.getState()
+      if (typingState.isStarted) return
+      useTypingStore.getState().initTest()
+    })
+    return unsub
+  }, [])
+
   return (
     <div
       className={cn(
-        'min-h-screen flex flex-col',
+        'h-screen flex flex-col overflow-hidden',
         'bg-[var(--bg)] text-[var(--text-primary)]'
       )}
     >
@@ -132,7 +143,6 @@ function App() {
           <Routes>
             <Route path="/" element={<TestPage />} />
             <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/leaderboard" element={<LeaderboardPage />} />
             <Route path="/settings" element={<SettingsPage />} />
             <Route
               path="*"

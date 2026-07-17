@@ -41,7 +41,7 @@ export function SEO({
       {!finalNoindex && <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />}
 
       <meta name="keywords" content={finalKeywords.join(', ')} />
-      <meta name="author" content="FalconType Contributors" />
+      <meta name="author" content="falconType Contributors" />
       <meta name="language" content="en" />
       <meta name="theme-color" content="#1e1e2e" />
 

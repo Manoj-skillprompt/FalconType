@@ -36,6 +36,7 @@ export const useHistoryStore = create<HistoryStore>((set, get) => {
       saveHistory(newResults)
 
       updateDailyStats(result)
+      const updatedDailyStats = loadDailyStats()
 
       const updatedStreak = updateStreak()
 
@@ -53,6 +54,7 @@ export const useHistoryStore = create<HistoryStore>((set, get) => {
 
       set({
         results: newResults,
+        dailyStats: updatedDailyStats,
         personalBests: pbs,
         streak: updatedStreak,
         achievements: allAchievements,

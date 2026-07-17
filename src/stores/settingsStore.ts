@@ -12,13 +12,9 @@ const DEFAULT_TYPING: TypingSettings = {
   punctuation: false,
   numbers: false,
   stopOnError: false,
-  confidenceMode: false,
   blindMode: false,
   hideTypedWords: false,
-  alwaysCenterCaret: false,
-  smoothScroll: true,
   liveWpm: true,
-  quickRestart: true,
   backspace: 'allow',
 }
 

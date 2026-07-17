@@ -121,7 +121,7 @@
     font-size: var(--font-size, 24px);
     font-weight: 500;
     line-height: 2;
-    letter-spacing: 0.03em;
+    letter-spacing: 0.08em;
     will-change: color;
   }
 
@@ -133,7 +133,7 @@
   .word-group {
     display: inline-flex;
     flex-wrap: nowrap;
-    padding-right: 0.45em;
+    padding-right: 0.75em;
   }
 }
 

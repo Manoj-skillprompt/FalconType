@@ -1,12 +1,12 @@
 import type { Settings, TestResult, DailyStats, PersonalBest, Achievements } from '@/types'
 import { getDateString } from './utils'
 
-const SETTINGS_KEY = 'keyforge_settings'
-const HISTORY_KEY = 'keyforge_history'
-const DAILY_KEY = 'keyforge_daily'
-const PB_KEY = 'keyforge_personal_bests'
-const ACHIEVEMENTS_KEY = 'keyforge_achievements'
-const STREAK_KEY = 'keyforge_streak'
+const SETTINGS_KEY = 'falcontype_settings'
+const HISTORY_KEY = 'falcontype_history'
+const DAILY_KEY = 'falcontype_daily'
+const PB_KEY = 'falcontype_personal_bests'
+const ACHIEVEMENTS_KEY = 'falcontype_achievements'
+const STREAK_KEY = 'falcontype_streak'
 
 export function loadSettings(): Settings | null {
   try {

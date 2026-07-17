@@ -1,5 +1,5 @@
 const SITE_URL = 'https://falcontype.com'
-const SITE_NAME = 'FalconType'
+const SITE_NAME = 'falconType'
 const DEFAULT_IMAGE = `${SITE_URL}/og-image.png`
 
 export interface PageSEO {
@@ -16,9 +16,9 @@ export interface PageSEO {
 export const siteConfig = {
   name: SITE_NAME,
   url: SITE_URL,
-  title: 'FalconType — Free Online Typing Speed Test',
+  title: 'falconType — Free Online Typing Speed Test',
   description:
-    'Improve your typing speed with FalconType. Free, open-source typing test with real-time WPM tracking, multiple themes, custom text, and detailed performance analytics.',
+    'Improve your typing speed with falconType. Free, open-source typing test with real-time WPM tracking, multiple themes, custom text, and detailed performance analytics.',
   ogImage: DEFAULT_IMAGE,
   twitterHandle: '@falcontype',
   keywords: [
@@ -37,9 +37,9 @@ export const siteConfig = {
 
 export const pages: Record<string, PageSEO> = {
   '/': {
-    title: 'FalconType — Free Online Typing Speed Test',
+    title: 'falconType — Free Online Typing Speed Test',
     description:
-      'Test your typing speed with FalconType. Real-time WPM tracking, accuracy metrics, multiple test modes, and detailed performance charts. Free and open-source.',
+      'Test your typing speed with falconType. Real-time WPM tracking, accuracy metrics, multiple test modes, and detailed performance charts. Free and open-source.',
     canonical: SITE_URL,
     keywords: [
       'typing test',
@@ -51,7 +51,7 @@ export const pages: Record<string, PageSEO> = {
     breadcrumbs: [{ name: 'Home', url: SITE_URL }],
   },
   '/dashboard': {
-    title: 'Dashboard — FalconType Typing Stats & Progress',
+    title: 'Dashboard — falconType Typing Stats & Progress',
     description:
       'Track your typing progress with detailed analytics. View WPM trends, accuracy history, activity heatmap, personal bests, and unlock achievements.',
     canonical: `${SITE_URL}/dashboard`,
@@ -67,9 +67,9 @@ export const pages: Record<string, PageSEO> = {
     ],
   },
   '/leaderboard': {
-    title: 'Leaderboard — FalconType Top Typists',
+    title: 'Leaderboard — falconType Top Typists',
     description:
-      'See the top typists on FalconType. Compare your WPM and accuracy against global, weekly, monthly, and all-time leaderboard rankings.',
+      'See the top typists on falconType. Compare your WPM and accuracy against global, weekly, monthly, and all-time leaderboard rankings.',
     canonical: `${SITE_URL}/leaderboard`,
     keywords: [
       'typing leaderboard',
@@ -83,9 +83,9 @@ export const pages: Record<string, PageSEO> = {
     ],
   },
   '/settings': {
-    title: 'Settings — FalconType Typing Preferences',
+    title: 'Settings — falconType Typing Preferences',
     description:
-      'Customize your FalconType experience. Choose themes, fonts, caret styles, adjust typing modes, sound settings, and appearance preferences.',
+      'Customize your falconType experience. Choose themes, fonts, caret styles, adjust typing modes, sound settings, and appearance preferences.',
     canonical: `${SITE_URL}/settings`,
     noindex: true,
     breadcrumbs: [

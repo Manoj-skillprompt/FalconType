@@ -18,7 +18,7 @@ export function LeaderboardPage() {
       />
 
       <section aria-label="Leaderboard">
-        <h1 className="sr-only">FalconType Leaderboard</h1>
+        <h1 className="sr-only">falconType Leaderboard</h1>
         <Leaderboard />
       </section>
     </>

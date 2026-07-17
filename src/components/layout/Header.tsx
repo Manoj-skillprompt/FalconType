@@ -1,12 +1,11 @@
 import { NavLink } from 'react-router-dom'
 import { useSettingsStore } from '@/stores/settingsStore'
 import { cn } from '@/lib/utils'
-import { Settings, BarChart3, Trophy, Keyboard } from 'lucide-react'
+import { Settings, BarChart3, Keyboard } from 'lucide-react'
 
 const NAV_ITEMS: { to: string; label: string; icon: typeof Keyboard; end?: boolean }[] = [
   { to: '/', label: 'Test', icon: Keyboard, end: true },
   { to: '/dashboard', label: 'Dashboard', icon: BarChart3 },
-  { to: '/leaderboard', label: 'Leaderboard', icon: Trophy },
 ]
 
 export function Header() {
@@ -18,9 +17,9 @@ export function Header() {
         <NavLink
           to="/"
           className="text-xl font-bold tracking-tight text-[var(--accent)] hover:opacity-80 transition-opacity"
-          aria-label="FalconType — Go to homepage"
+          aria-label="falconType — Go to homepage"
         >
-          FalconType
+          falconType
         </NavLink>
       </div>
 

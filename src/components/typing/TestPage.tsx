@@ -17,7 +17,7 @@ export function TestPage() {
       <JsonLd data={[websiteJsonLd(), faqJsonLd(), breadcrumbJsonLd([{ name: 'Home', url: 'https://falcontype.com/' }])]}/>
 
       <article className="w-full flex flex-col items-center justify-start gap-2 mt-12">
-        <h1 className="sr-only">FalconType — Free Online Typing Speed Test</h1>
+        <h1 className="sr-only">falconType — Free Online Typing Speed Test</h1>
 
         <TestModes />
         {!isFinished && <TypingArea />}
