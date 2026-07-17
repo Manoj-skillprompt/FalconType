@@ -212,12 +212,6 @@ export function SettingsPanel() {
               ))}
             </OptionGroup>
 
-            <OptionGroup label="Confidence Mode">
-              <ToggleButton active={settings.typing.confidenceMode} onClick={() => updateTyping({ confidenceMode: !settings.typing.confidenceMode })}>
-                {settings.typing.confidenceMode ? 'On' : 'Off'}
-              </ToggleButton>
-            </OptionGroup>
-
             <OptionGroup label="Blind Mode">
               <ToggleButton active={settings.typing.blindMode} onClick={() => updateTyping({ blindMode: !settings.typing.blindMode })}>
                 {settings.typing.blindMode ? 'On' : 'Off'}
@@ -230,23 +224,12 @@ export function SettingsPanel() {
               </ToggleButton>
             </OptionGroup>
 
-            <OptionGroup label="Always Center Caret">
-              <ToggleButton active={settings.typing.alwaysCenterCaret} onClick={() => updateTyping({ alwaysCenterCaret: !settings.typing.alwaysCenterCaret })}>
-                {settings.typing.alwaysCenterCaret ? 'On' : 'Off'}
-              </ToggleButton>
-            </OptionGroup>
-
             <OptionGroup label="Live WPM">
               <ToggleButton active={settings.typing.liveWpm} onClick={() => updateTyping({ liveWpm: !settings.typing.liveWpm })}>
                 {settings.typing.liveWpm ? 'On' : 'Off'}
               </ToggleButton>
             </OptionGroup>
 
-            <OptionGroup label="Quick Restart">
-              <ToggleButton active={settings.typing.quickRestart} onClick={() => updateTyping({ quickRestart: !settings.typing.quickRestart })}>
-                {settings.typing.quickRestart ? 'On' : 'Off'}
-              </ToggleButton>
-            </OptionGroup>
           </Section>
 
           <Section title="Sound">

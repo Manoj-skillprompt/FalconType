@@ -1,4 +1,4 @@
-# FalconType - Typing Speed Test
+# falconType - Typing Speed Test
 # https://falcontype.manojkumarchaudhary23.com.np
 
 User-agent: *

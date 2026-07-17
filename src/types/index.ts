@@ -17,13 +17,9 @@ export interface TypingSettings {
   punctuation: boolean
   numbers: boolean
   stopOnError: boolean
-  confidenceMode: boolean
   blindMode: boolean
   hideTypedWords: boolean
-  alwaysCenterCaret: boolean
-  smoothScroll: boolean
   liveWpm: boolean
-  quickRestart: boolean
   backspace: 'allow' | 'deny'
 }
 

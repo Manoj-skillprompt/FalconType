@@ -14,19 +14,6 @@ const FILTERS: { key: LeaderboardFilter; label: string; icon: typeof Trophy }[] 
   { key: 'alltime', label: 'All Time', icon: Trophy },
 ]
 
-const MOCK_ENTRIES = [
-  { rank: 1, name: 'TypeMaster', wpm: 152, accuracy: 98, tests: 1240 },
-  { rank: 2, name: 'SpeedDev', wpm: 148, accuracy: 97, tests: 892 },
-  { rank: 3, name: 'KeyNinja', wpm: 145, accuracy: 96, tests: 2104 },
-  { rank: 4, name: 'FingerStorm', wpm: 141, accuracy: 95, tests: 567 },
-  { rank: 5, name: 'CodeRacer', wpm: 139, accuracy: 97, tests: 1567 },
-  { rank: 6, name: 'ByteWriter', wpm: 136, accuracy: 94, tests: 723 },
-  { rank: 7, name: 'SwiftType', wpm: 133, accuracy: 96, tests: 1890 },
-  { rank: 8, name: 'DataFlow', wpm: 130, accuracy: 93, tests: 456 },
-  { rank: 9, name: 'TextWizard', wpm: 128, accuracy: 95, tests: 2345 },
-  { rank: 10, name: 'QuickStroke', wpm: 125, accuracy: 94, tests: 678 },
-]
-
 function getRankBadge(rank: number) {
   if (rank === 1) return '🥇'
   if (rank === 2) return '🥈'
@@ -85,35 +72,10 @@ export function Leaderboard() {
 
       {/* Leaderboard Table */}
       <section className={cn('rounded-xl border border-[var(--border)] overflow-hidden')} aria-label="Leaderboard rankings">
-        <div className="divide-y divide-[var(--border)]" role="list">
-          {MOCK_ENTRIES.map((entry) => (
-            <div
-              key={entry.rank}
-              role="listitem"
-              className={cn(
-                'flex items-center justify-between px-4 py-3',
-                'hover:bg-[var(--bg-card)] transition-colors'
-              )}
-            >
-              <div className="flex items-center gap-4">
-                <span className="w-8 text-center text-lg" aria-label={`Rank ${entry.rank}`}>{getRankBadge(entry.rank)}</span>
-                <div>
-                  <p className="font-medium text-sm">{entry.name}</p>
-                  <p className="text-xs text-[var(--text-secondary)]">{entry.tests.toLocaleString()} tests</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-6">
-                <div className="text-right">
-                  <p className="font-bold tabular-nums text-[var(--accent)]">{entry.wpm}</p>
-                  <p className="text-xs text-[var(--text-secondary)]">wpm</p>
-                </div>
-                <div className="text-right w-14">
-                  <p className="font-medium text-sm">{entry.accuracy}%</p>
-                  <p className="text-xs text-[var(--text-secondary)]">acc</p>
-                </div>
-              </div>
-            </div>
-          ))}
+        <div className="p-8 text-center">
+          <Trophy size={40} className="mx-auto mb-3 text-[var(--text-secondary)] opacity-40" />
+          <p className="text-sm text-[var(--text-secondary)]">Leaderboard coming soon</p>
+          <p className="text-xs text-[var(--text-secondary)] mt-1 opacity-60">Complete typing tests to compete with others</p>
         </div>
       </section>
 

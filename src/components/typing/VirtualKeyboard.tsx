@@ -72,7 +72,7 @@ export function VirtualKeyboard() {
           'flex items-center justify-center rounded-md border select-none',
           'text-sm font-mono font-medium',
           'transition-all duration-150 ease-out',
-          wide ? 'w-[7em]' : 'w-[3.6em]',
+          wide ? 'w-[12em]' : 'w-[3.6em]',
           'h-[3.6em]',
           stateClasses[state],
         )}

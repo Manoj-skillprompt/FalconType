@@ -1,6 +1,6 @@
 {
-  "name": "FalconType",
-  "short_name": "FalconType",
+  "name": "falconType",
+  "short_name": "falconType",
   "description": "Free online typing speed test with real-time WPM tracking and performance analytics.",
   "start_url": "/",
   "display": "standalone",
