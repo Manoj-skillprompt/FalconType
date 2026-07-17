@@ -21,8 +21,13 @@ export function ShortcutsHelp() {
         setIsOpen(prev => !prev)
       }
     }
+    const openHandler = () => setIsOpen(true)
     window.addEventListener('keydown', handler)
-    return () => window.removeEventListener('keydown', handler)
+    window.addEventListener('open-shortcuts', openHandler)
+    return () => {
+      window.removeEventListener('keydown', handler)
+      window.removeEventListener('open-shortcuts', openHandler)
+    }
   }, [])
 
   if (!isOpen) return null
