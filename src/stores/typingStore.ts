@@ -3,6 +3,7 @@ import type { CharState, Stats, TestResult } from '@/types'
 import { generateText } from '@/lib/wordGenerator'
 import { generateId } from '@/lib/utils'
 import { useSettingsStore } from './settingsStore'
+import { playKeypress, playError } from '@/lib/sound'
 
 interface TypingStore {
   chars: CharState[]
@@ -14,11 +15,15 @@ interface TypingStore {
   timer: number
   startTime: number
   totalWords: number
+  lastPressedKey: string | null
+  lastPressedCorrect: boolean
 
-  initTest: () => void
+  initTest: (reuseText?: string) => void
   handleKeyPress: (key: string) => void
   handleBackspace: () => void
   resetTest: () => void
+  retryTest: () => void
+  stopTest: () => void
   tick: () => void
   setFocus: (focus: boolean) => void
 }
@@ -111,12 +116,16 @@ export const useTypingStore = create<TypingStore>((set, get) => ({
   timer: 0,
   startTime: 0,
   totalWords: 0,
+  lastPressedKey: null,
+  lastPressedCorrect: false,
 
-  initTest: () => {
+  initTest: (reuseText?: string) => {
     const settings = useSettingsStore.getState().settings.typing
-    const wordCount = settings.wordCount === 'custom' ? settings.customWordCount : settings.wordCount
-    const count = settings.mode === 'time' ? 200 : (settings.mode === 'words' ? wordCount : 50)
-    const text = generateText(settings.mode, count, settings.language, settings.punctuation, settings.numbers, settings.customText)
+    const text = reuseText || (() => {
+      const wordCount = settings.wordCount === 'custom' ? settings.customWordCount : settings.wordCount
+      const count = settings.mode === 'time' ? 200 : (settings.mode === 'words' ? wordCount : 50)
+      return generateText(settings.mode, count, settings.language, settings.punctuation, settings.numbers, settings.customText)
+    })()
     const totalWords = text.split(/\s+/).length
 
     set({
@@ -158,6 +167,11 @@ export const useTypingStore = create<TypingStore>((set, get) => ({
     if (index >= chars.length) return
 
     const isCorrect = key === chars[index].char
+
+    const { sound } = useSettingsStore.getState().settings
+    if (isCorrect && sound.keypress) playKeypress(sound.volume)
+    if (!isCorrect && sound.error) playError(sound.volume)
+
     chars[index] = {
       ...chars[index],
       typed: key,
@@ -183,6 +197,8 @@ export const useTypingStore = create<TypingStore>((set, get) => ({
     set({
       chars,
       currentIndex: nextIndex,
+      lastPressedKey: key,
+      lastPressedCorrect: isCorrect,
       stats: shouldAddHistory ? {
         ...newStats,
         wpmHistory: [...newStats.wpmHistory, newStats.wpm],
@@ -258,6 +274,19 @@ export const useTypingStore = create<TypingStore>((set, get) => ({
 
   resetTest: () => {
     get().initTest()
+  },
+
+  retryTest: () => {
+    const text = get().chars.map(c => c.char).join('')
+    get().initTest(text)
+  },
+
+  stopTest: () => {
+    const state = get()
+    if (!state.isStarted || state.isFinished) return
+    const elapsed = state.startTime > 0 ? (Date.now() - state.startTime) / 1000 : 0
+    const finalStats = calculateStats(state.chars, elapsed, state.totalWords)
+    set({ isFinished: true, stats: finalStats })
   },
 
   setFocus: (focus) => set({ focus }),

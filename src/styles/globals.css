@@ -26,54 +26,6 @@
     --border: #e0e0e0;
     --accent: #e2b714;
   }
-
-  .theme-olivia {
-    --bg: #1c1c1c;
-    --bg-card: #2a2a2a;
-    --text-primary: #e0e0e0;
-    --text-secondary: #808080;
-    --text-correct: #98c379;
-    --text-incorrect: #e06c75;
-    --text-untyped: #5c5c5c;
-    --border: #3a3a3a;
-    --accent: #c678dd;
-  }
-
-  .theme-mirage {
-    --bg: #202023;
-    --bg-card: #2a2a30;
-    --text-primary: #d5c4a1;
-    --text-secondary: #928374;
-    --text-correct: #b8bb26;
-    --text-incorrect: #fb4934;
-    --text-untyped: #665c54;
-    --border: #3c3836;
-    --accent: #d3869b;
-  }
-
-  .theme-dracula {
-    --bg: #282a36;
-    --bg-card: #333547;
-    --text-primary: #f8f8f2;
-    --text-secondary: #6272a4;
-    --text-correct: #50fa7b;
-    --text-incorrect: #ff5555;
-    --text-untyped: #6272a480;
-    --border: #44475a;
-    --accent: #bd93f9;
-  }
-
-  .theme-monokai {
-    --bg: #272822;
-    --bg-card: #3e3d32;
-    --text-primary: #f8f8f2;
-    --text-secondary: #75715e;
-    --text-correct: #a6e22e;
-    --text-incorrect: #f92672;
-    --text-untyped: #49483e;
-    --border: #49483e;
-    --accent: #fd971f;
-  }
 }
 
 @layer base {
@@ -84,7 +36,7 @@
 
   body {
     margin: 0;
-    font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+    font-family: var(--font-family, 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow: hidden;
@@ -153,7 +105,9 @@
 
 @layer components {
   .typing-viewport {
-    height: 150px;
+    height: calc(var(--font-size, 24px) * 6.5);
+    min-height: 120px;
+    max-height: 220px;
     overflow: hidden;
     -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
     mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
