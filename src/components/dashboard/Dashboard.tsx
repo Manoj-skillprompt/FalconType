@@ -77,8 +77,8 @@ export function Dashboard() {
       {results.length > 0 && (
         <section className={cn('p-4 rounded-xl bg-[var(--bg-card)] border border-[var(--border)]')}>
           <h2 className="text-sm font-medium text-[var(--text-secondary)] uppercase tracking-wider mb-4">Recent Tests</h2>
-          <div className="space-y-1" role="list">
-            {results.slice(0, 10).map((r) => (
+          <div className="space-y-1 max-h-[300px] overflow-y-auto pr-2" role="list">
+            {results.slice(0, 50).map((r) => (
               <div key={r.id} role="listitem" className="flex items-center justify-between py-1.5 text-sm">
                 <div className="flex items-center gap-3">
                   <span className="font-mono font-bold text-[var(--accent)] w-12">{r.wpm}wpm</span>
