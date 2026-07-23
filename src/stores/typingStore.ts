@@ -172,6 +172,26 @@ export const useTypingStore = create<TypingStore>((set, get) => ({
     if (isCorrect && sound.keypress) playKeypress(sound.volume)
     if (!isCorrect && sound.error) playError(sound.volume)
 
+    if (settings.stopOnError && !isCorrect) {
+      chars[index] = {
+        ...chars[index],
+        typed: key,
+        correct: false,
+        active: true,
+      }
+      
+      const elapsed = state.startTime > 0 ? (Date.now() - state.startTime) / 1000 : 0
+      const newStats = calculateStats(chars, elapsed, state.totalWords)
+      
+      set({
+        chars,
+        lastPressedKey: key,
+        lastPressedCorrect: false,
+        stats: newStats,
+      })
+      return
+    }
+
     chars[index] = {
       ...chars[index],
       typed: key,
@@ -208,10 +228,6 @@ export const useTypingStore = create<TypingStore>((set, get) => ({
       isFinished,
       timer: settings.mode === 'time' ? Math.max(0, settings.time - elapsed) : 0,
     })
-
-    if (settings.stopOnError && !isCorrect) {
-      return
-    }
   },
 
   handleBackspace: () => {
